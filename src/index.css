@@ -1,0 +1,34 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: autumn;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px;
+  font-size: 16px;
+  line-height: 1.5;
+  resize: vertical;
+
+  border-radius: 8px;
+  border: 1px solid #ccc;
+
+  font-family: inherit;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+}
+
+.tools-input {
+  display: flex;
+  gap: 8px;
+}
+
+.tools-list li {
+  display: flex;
+  margin: 6px 0;
+}
