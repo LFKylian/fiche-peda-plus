@@ -1,29 +1,22 @@
-import { Link } from "react-router-dom"
+import { Activity } from "../model/Activity"
+import { ActivityList } from "../components/ActivityList"
+import { ActivitiesDirectory } from "../model/ActivitiesDirectory"
 
-type Session = {
-  id: string
-  theme: string
-  date: string
-}
+export function Home() {
+  ActivitiesDirectory.fetchLocalStorage()
+  const activities: Activity[] = ActivitiesDirectory.getAllActivities()
 
-export function Home({ sessions }: { sessions: Session[] }) {
   return (
-    <div>
-      <h1>Mes sessions</h1>
+    <>
 
-      <Link to="/nouvelle-fiche-pedagogique">
-        <button>➕ Créer une session</button>
-      </Link>
+      <div>
+        <h1><strong>Mes fiches pédagogiques</strong></h1>
+      </div>
 
-      <ul>
-        {sessions.map(session => (
-          <li key={session.id}>
-            <Link to={`/fiche-pedagogique/${session.id}`}>
-              {session.theme} — {session.date}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+      <div>
+        <ActivityList activities={activities} />
+      </div>
+
+    </>
   )
 }

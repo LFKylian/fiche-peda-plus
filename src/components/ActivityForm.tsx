@@ -1,8 +1,15 @@
 import { useState } from "react"
+import { Activity } from "../model/Activity"
+import { useNavigate, useParams } from "react-router-dom"
 import type { ActivityFormState } from "../types/ActivityFormState"
+import { ActivitiesDirectory } from "../model/ActivitiesDirectory"
 
 export function ActivityForm() {
-  const [activityForm, setActivityForm] = useState<ActivityFormState>({
+  const navigate = useNavigate()
+  const [toolInput, setToolInput] = useState("")
+  const [tools, setTools] = useState<string[]>([])
+
+  let initialState: ActivityFormState = {
     theme: "",
     format: "",
     name: "",
@@ -12,10 +19,21 @@ export function ActivityForm() {
     tools: [],
     evalCriterions: "",
     results: ""
-  })
+  }
+  
+  // Handle redirection to /fiche-pedagogique/:id
+  const { id } = useParams<{ id: string }>()
+  
+  if (id) {
+    const loadedActivity: Activity | null = ActivitiesDirectory.getActivityByID(id)
+    
+    if (loadedActivity) {
+      initialState = Activity.toForm(loadedActivity)
+    }
+  }
+  //
 
-  const [toolInput, setToolInput] = useState("")
-  const [tools, setTools] = useState<string[]>([])
+  const [activityForm, setActivityForm] = useState<ActivityFormState>(initialState)
 
   function updateField<K extends keyof ActivityFormState>(
     key: K,
@@ -44,143 +62,158 @@ export function ActivityForm() {
     )
   }
 
+  function handleSave() {
+    Activity.save(activityForm)
+    navigate("/")
+  }
+
   return (
-    <form className="activity-form">
-      
-      {/* IDENTITÉ */}
-      <section>
-        <h2>Informations générales</h2>
+    <>
 
-        <label>
-          Thème
-          <input
-            value={activityForm.theme}
-            onChange={e => updateField("theme", e.target.value)}
-          />
-        </label>
+      <form className="activity-form">
 
-        <label>
-          Format
-          <input
-            value={activityForm.format}
-            onChange={e => updateField("format", e.target.value)}
-          />
-        </label>
+        {/* IDENTITÉ */}
+        <section>
+          <h2>Informations générales</h2>
 
-        <label>
-          Nom de l’activité
-          <input
-            value={activityForm.name}
-            onChange={e => updateField("name", e.target.value)}
-          />
-        </label>
-      </section>
+          <label>
+            Thème
+            <input
+              value={activityForm.theme}
+              onChange={e => updateField("theme", e.target.value)}
+            />
+          </label>
 
-      {/* CONTENU */}
-      <section>
-        <h2>Contenu pédagogique</h2>
+          <label>
+            Format
+            <input
+              value={activityForm.format}
+              onChange={e => updateField("format", e.target.value)}
+            />
+          </label>
 
-        <label>
-          Déroulé
-          <textarea
-            className="textarea"
-            value={activityForm.proceedings}
-            onChange={e => {
-              autoResize(e)
-              updateField("proceedings", e.target.value)
-            }}
-            placeholder="Étapes, consignes, déroulement..."
-          />
-        </label>
+          <label>
+            Nom de l’activité
+            <input
+              value={activityForm.name}
+              onChange={e => updateField("name", e.target.value)}
+            />
+          </label>
+        </section>
 
-        <label>
-          Objectifs
-          <textarea
-            className="textarea"
-            value={activityForm.goals}
-            onChange={e => {
-              autoResize(e)
-              updateField("goals", e.target.value)
-            }}
-            placeholder="Compétences visées, intentions pédagogiques..."
-          />
-        </label>
+        {/* CONTENU */}
+        <section>
+          <h2>Contenu pédagogique</h2>
 
-        <label>
-          Timing
-          <input
-            value={activityForm.timing}
-            onChange={e => updateField("timing", e.target.value)}
-            placeholder="Ex : 15 min / 30 min"
-          />
-        </label>
-      </section>
+          <label>
+            Déroulé
+            <textarea
+              className="textarea"
+              value={activityForm.proceedings}
+              onChange={e => {
+                autoResize(e)
+                updateField("proceedings", e.target.value)
+              }}
+              placeholder="Étapes, consignes, déroulement..."
+            />
+          </label>
 
-      {/* MATÉRIEL */}
-      <section>
-        <h2>Matériel</h2>
+          <label>
+            Objectifs
+            <textarea
+              className="textarea"
+              value={activityForm.goals}
+              onChange={e => {
+                autoResize(e)
+                updateField("goals", e.target.value)
+              }}
+              placeholder="Compétences visées, intentions pédagogiques..."
+            />
+          </label>
 
-        <div className="tools-input">
-          <input
-            value={toolInput}
-            placeholder="Ajouter un matériel (Entrée pour valider)"
-            onChange={e => setToolInput(e.target.value)}
-            onKeyDown={e => {
-              if (e.key === "Enter") {
-                e.preventDefault()
-                addTool()
-              }
-            }}
-          />
-          <button type="button" onClick={addTool}>
-            Ajouter
-          </button>
-        </div>
+          <label>
+            Timing
+            <input
+              value={activityForm.timing}
+              onChange={e => updateField("timing", e.target.value)}
+              placeholder="Ex : 15 min / 30 min"
+            />
+          </label>
+        </section>
 
-        <ul className="tools-list">
-          {tools.map((tool, index) => (
-            <li key={index}>
-              {tool}
-              <button
-                type="button"
-                onClick={() => removeTool(index)}
-              >
-                ✕
-              </button>
-            </li>
-          ))}
-        </ul>
-      </section>
+        {/* MATÉRIEL */}
+        <section>
+          <h2>Matériel</h2>
 
-      {/* ÉVALUATION */}
-      <section>
-        <h2>Évaluation & résultats</h2>
+          <div className="tools-input">
+            <input
+              value={toolInput}
+              placeholder="Ajouter un matériel (Entrée pour valider)"
+              onChange={e => setToolInput(e.target.value)}
+              onKeyDown={e => {
+                if (e.key === "Enter") {
+                  e.preventDefault()
+                  addTool()
+                }
+              }}
+            />
+            <button type="button" onClick={addTool}>
+              Ajouter
+            </button>
+          </div>
 
-        <label>
-          Critères d’évaluation
-          <textarea
-            className="textarea"
-            value={activityForm.evalCriterions}
-            onChange={e => {
-              autoResize(e)
-              updateField("evalCriterions", e.target.value)
-            }}
-          />
-        </label>
+          <ul className="tools-list">
+            {tools.map((tool, index) => (
+              <li key={index}>
+                {tool}
+                <button
+                  type="button"
+                  onClick={() => removeTool(index)}
+                >
+                  ✕
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-        <label>
-          Résultats observés
-          <textarea
-            className="textarea"
-            value={activityForm.results}
-            onChange={e => {
-              autoResize(e)
-              updateField("results", e.target.value)
-            }}
-          />
-        </label>
-      </section>
+        {/* ÉVALUATION */}
+        <section>
+          <h2>Évaluation & résultats</h2>
 
-    </form>
+          <label>
+            Critères d’évaluation
+            <textarea
+              className="textarea"
+              value={activityForm.evalCriterions}
+              onChange={e => {
+                autoResize(e)
+                updateField("evalCriterions", e.target.value)
+              }}
+            />
+          </label>
+
+          <label>
+            Résultats observés
+            <textarea
+              className="textarea"
+              value={activityForm.results}
+              onChange={e => {
+                autoResize(e)
+                updateField("results", e.target.value)
+              }}
+            />
+          </label>
+        </section>
+
+      </form>
+
+      <div>
+        <button className="btn btn-accent" onClick={handleSave}>
+          Enregistrer
+        </button>
+      </div>
+
+    </>
   )
 }
