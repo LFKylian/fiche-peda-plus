@@ -1,10 +1,12 @@
-import { Activity } from "../model/Activity"
-import { ActivityList } from "../components/ActivityList"
-import { ActivitiesDirectory } from "../model/ActivitiesDirectory"
+import { ActivityHome } from "./ActivityHome";
+import type { Session } from "../model/Session";
+import { SessionsList } from "./components/SessionsList";
+import { SessionsDirectory } from "../model/SessionsDirectory";
 
 export function Home() {
-  ActivitiesDirectory.fetchLocalStorage()
-  const activities: Activity[] = ActivitiesDirectory.getAllActivities()
+  SessionsDirectory.fetchLocalStorage()
+  const sessionsMap: Map<string, Session> = SessionsDirectory.getAllSessions()
+  const sessions: Session[] = Array.from(sessionsMap.values())
 
   return (
     <>
@@ -14,9 +16,16 @@ export function Home() {
       </div>
 
       <div>
-        <ActivityList activities={activities} />
+        <SessionsList sessions={sessions} />
+      </div>
+
+      <br />
+
+      <div>
+        <ActivityHome />
       </div>
 
     </>
   )
+
 }

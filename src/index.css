@@ -1,4 +1,5 @@
 @import "tailwindcss";
+
 @plugin "daisyui" {
   themes: autumn;
 }
@@ -31,4 +32,32 @@
 .tools-list li {
   display: flex;
   margin: 6px 0;
+}
+
+.activities-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 16px;
+  border: 1px solid #ddd;
+}
+
+.activity-card {
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  background: white;
+}
+
+.activity-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.activity-card.selected {
+  background: #e0f2ff;
+  border-color: #3b82f6;
 }

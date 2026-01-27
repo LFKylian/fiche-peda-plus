@@ -1,15 +1,16 @@
 import { useState } from "react"
-import { Activity } from "../model/Activity"
+import { Activity } from "../../model/Activity"
 import { useNavigate, useParams } from "react-router-dom"
-import type { ActivityFormState } from "../types/ActivityFormState"
-import { ActivitiesDirectory } from "../model/ActivitiesDirectory"
+import type { ActivityDescription } from "../../types/Form"
+import { ActivitiesDirectory } from "../../model/ActivitiesDirectory"
 
 export function ActivityForm() {
   const navigate = useNavigate()
   const [toolInput, setToolInput] = useState("")
   const [tools, setTools] = useState<string[]>([])
 
-  let initialState: ActivityFormState = {
+  let initialState: ActivityDescription = {
+    id: "",
     theme: "",
     format: "",
     name: "",
@@ -20,24 +21,23 @@ export function ActivityForm() {
     evalCriterions: "",
     results: ""
   }
-  
-  // Handle redirection to /fiche-pedagogique/:id
+
+  // Handle activity modification from /activité/:id
   const { id } = useParams<{ id: string }>()
-  
+
   if (id) {
     const loadedActivity: Activity | null = ActivitiesDirectory.getActivityByID(id)
-    
+
     if (loadedActivity) {
-      initialState = Activity.toForm(loadedActivity)
+      initialState = Activity.getDescription(loadedActivity)
     }
   }
-  //
 
-  const [activityForm, setActivityForm] = useState<ActivityFormState>(initialState)
+  const [activityForm, setActivityForm] = useState<ActivityDescription>(initialState)
 
-  function updateField<K extends keyof ActivityFormState>(
+  function updateField<K extends keyof ActivityDescription>(
     key: K,
-    value: ActivityFormState[K]
+    value: ActivityDescription[K]
   ) {
     setActivityForm(prev => ({ ...prev, [key]: value }))
   }
@@ -63,7 +63,11 @@ export function ActivityForm() {
   }
 
   function handleSave() {
-    Activity.save(activityForm)
+    Activity.saveFromDescription(activityForm)
+    navigate("/")
+  }
+
+  function handleCancel() {
     navigate("/")
   }
 
@@ -211,6 +215,10 @@ export function ActivityForm() {
       <div>
         <button className="btn btn-accent" onClick={handleSave}>
           Enregistrer
+        </button>
+
+        <button className="btn btn-accent" onClick={handleCancel}>
+          Annuler
         </button>
       </div>
 

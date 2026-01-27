@@ -1,19 +1,19 @@
 import { Link } from "react-router-dom"
-import type { Activity } from "../model/Activity"
+import type { Activity } from "../../model/Activity"
 
 type Props = {
     activities: Activity[]
 }
 
-export function ActivityList({ activities }: Props) {
+export function ActivitiesList({ activities }: Props) {
 
     return (
         <>
 
             <div>
-                <Link to="/">
+                <Link to="/nouvelle-activite">
                     <button className="btn btn-accent">
-                        Ajouter une fiche pédagogique
+                        Créer une activité
                     </button>
                 </Link>
             </div>
@@ -21,7 +21,7 @@ export function ActivityList({ activities }: Props) {
             <div>
                 {activities.map(activity => (
                     <div key={activity.id}>
-                        <Link to={ `/fiche-pedagogique/${activity.id}` }>
+                        <Link to={ `/activite/${activity.id}` }>
                             <button className="btn btn-accent">
                                 {activity.name}
                             </button>
