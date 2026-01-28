@@ -16,9 +16,7 @@ RUN npm install
 COPY . ./
 
 # The port used for the app
-# Putting it as an environment variable
-ENV PORT=5173
-# Expose the port to access it
+# Exposes the port to access it
 EXPOSE 5173
 
 # Command to run the app
