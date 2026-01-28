@@ -1,3 +1,4 @@
+import { base } from "../../App"
 import { Link } from "react-router-dom"
 import type { Session } from "../../model/Session"
 
@@ -11,7 +12,7 @@ export function SessionsList({ sessions }: Props) {
         <>
 
             <div>
-                <Link to="/nouvelle-fiche-pedagogique">
+                <Link to={`${base}/nouvelle-fiche-pedagogique`}>
                     <button className="btn btn-accent">
                         Créer une fiche pédagogique
                     </button>
@@ -21,7 +22,7 @@ export function SessionsList({ sessions }: Props) {
             <div>
                 {sessions.map((session) => (
                     <div key={session.id}>
-                        <Link to={`/fiche-pedagogique/${session.id}`}>
+                        <Link to={`${base}/fiche-pedagogique/${session.id}`}>
                             <button className="btn btn-accent">
                                 Thème : {session.generalInfo.theme}
                                 <br />
