@@ -65,11 +65,11 @@ export function ActivityForm() {
 
   function handleSave() {
     Activity.saveFromDescription(activityForm)
-    navigate(base)
+    navigate(`${base}/`)
   }
 
   function handleCancel() {
-    navigate(base)
+    navigate(`${base}/`)
   }
 
   return (
