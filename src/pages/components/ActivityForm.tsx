@@ -1,4 +1,4 @@
-import { base } from "../../App"
+// import { base } from "../../App"
 import { useState } from "react"
 import { Activity } from "../../model/Activity"
 import { useNavigate, useParams } from "react-router-dom"
@@ -65,11 +65,11 @@ export function ActivityForm() {
 
   function handleSave() {
     Activity.saveFromDescription(activityForm)
-    navigate(`${base}/`)
+    navigate(`/`)
   }
 
   function handleCancel() {
-    navigate(`${base}/`)
+    navigate(`/`)
   }
 
   return (

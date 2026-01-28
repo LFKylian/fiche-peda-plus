@@ -1,4 +1,4 @@
-import { base } from "../../App"
+// import { base } from "../../App"
 import { useEffect, useState } from "react"
 import { Session } from "../../model/Session"
 import { ActivitySelector } from "./ActivitySelector"
@@ -59,7 +59,7 @@ export function SessionForm({ createdActivities }: Props) {
     useEffect(() => {
         if (isLeaving) {
             Session.saveFromDescription(sessionForm)
-            navigate(`${base}/`)
+            navigate(`/`)
         }
         // Cleanup function called when a state change occurs
         return () => setIsLeaving(false)
@@ -129,7 +129,7 @@ export function SessionForm({ createdActivities }: Props) {
     }
 
     function handleCancel() {
-        navigate(`${base}/`)
+        navigate(`/`)
     }
 
     return (
