@@ -213,12 +213,12 @@ export function ActivityForm() {
 
       </form>
 
-      <div>
+      <div className="form-actions">
         <button className="btn btn-accent" onClick={handleSave}>
           Enregistrer
         </button>
 
-        <button className="btn btn-accent" onClick={handleCancel}>
+        <button className="btn btn-secondary" onClick={handleCancel}>
           Annuler
         </button>
       </div>

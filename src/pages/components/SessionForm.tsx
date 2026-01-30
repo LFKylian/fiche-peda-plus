@@ -6,6 +6,7 @@ import type { ActivitySummary } from "../../types/Form"
 import { useNavigate, useParams } from "react-router-dom"
 import type { SessionDescription } from "../../types/Form"
 import { SessionsDirectory } from "../../model/SessionsDirectory"
+import { DocxController } from "../../controller/DocxController"
 
 type Props = {
     createdActivities: ActivitySummary[]
@@ -64,6 +65,26 @@ export function SessionForm({ createdActivities }: Props) {
         // Cleanup function called when a state change occurs
         return () => setIsLeaving(false)
     }, [sessionForm, isLeaving])
+
+    const [isDownloading, setIsDownloading] = useState(false)
+    useEffect(() => {
+        if (isDownloading) {
+            Session.saveFromDescription(sessionForm)
+            DocxController.download(sessionForm.id)
+        }
+        // Cleanup function called when a state change occurs
+        return () => setIsDownloading(false)
+    }, [sessionForm, isDownloading])
+
+    const [isPreviewing, setIsPreviewing] = useState(false)
+    useEffect(() => {
+        if (isPreviewing) {
+            Session.saveFromDescription(sessionForm)
+            navigate(`/fiche-pedagogique/:${sessionForm.id}/apercu-docx`)
+        }
+        // Cleanup function called when a state change occurs
+        return () => setIsPreviewing(false)
+    }, [sessionForm, isPreviewing])
 
     function updateGeneralInfo<K extends keyof SessionDescription["generalInfo"]>(
         key: K,
@@ -130,6 +151,16 @@ export function SessionForm({ createdActivities }: Props) {
 
     function handleCancel() {
         navigate(`/`)
+    }
+
+    function handleDownload() {
+        updateActivities()
+        setIsDownloading(true)
+    }
+
+    function handlePreview() {
+        updateActivities()
+        setIsPreviewing(true)
     }
 
     return (
@@ -268,7 +299,18 @@ export function SessionForm({ createdActivities }: Props) {
                 <button className="btn btn-secondary" onClick={handleCancel}>
                     Annuler
                 </button>
+
+                <br />
+
+                <button className="btn btn-accent" onClick={handleDownload}>
+                    Télécharger
+                </button>
+
+                <button className="btn btn-secondary" onClick={handlePreview}>
+                    Aperçu
+                </button>
             </div>
+
         </>
     )
 }

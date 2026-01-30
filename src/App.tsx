@@ -1,5 +1,6 @@
 import { Home } from "./pages/Home"
 import { ActivityHome } from "./pages/ActivityHome"
+import { DocxPreview } from "./pages/DocumentPreview"
 import { SessionBuilder } from "./pages/SessionBuilder"
 import { ActivityBuilder } from "./pages/ActivityBuilder"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
@@ -15,6 +16,7 @@ export default function App() {
 
         <Route path={`/nouvelle-fiche-pedagogique`} element={<SessionBuilder />} />
         <Route path={`/fiche-pedagogique/:id`} element={<SessionBuilder />} />
+        <Route path={`/fiche-pedagogique/:id/apercu-docx`} element={<DocxPreview />} />
 
         <Route path={`/mes-activites`} element={<ActivityHome />} />
         <Route path={`/nouvelle-activite`} element={<ActivityBuilder />} />
