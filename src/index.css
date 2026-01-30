@@ -191,9 +191,10 @@ ul li button {
 .form-actions {
   display: flex;
   justify-content: center;
+  text-align: center;
   gap: 1rem;
   margin-top: 2rem;
-  padding-bottom: 5rem;
+  padding-bottom: 1rem;
 }
 
 /* HOME LISTS */

@@ -80,7 +80,7 @@ export function SessionForm({ createdActivities }: Props) {
     useEffect(() => {
         if (isPreviewing) {
             Session.saveFromDescription(sessionForm)
-            navigate(`/fiche-pedagogique/:${sessionForm.id}/apercu-docx`)
+            navigate(`/fiche-pedagogique/${sessionForm.id}/apercu-docx`)
         }
         // Cleanup function called when a state change occurs
         return () => setIsPreviewing(false)
@@ -300,8 +300,9 @@ export function SessionForm({ createdActivities }: Props) {
                     Annuler
                 </button>
 
-                <br />
+            </div>
 
+            <div className="form-actions">
                 <button className="btn btn-accent" onClick={handleDownload}>
                     Télécharger
                 </button>
@@ -309,6 +310,10 @@ export function SessionForm({ createdActivities }: Props) {
                 <button className="btn btn-secondary" onClick={handlePreview}>
                     Aperçu
                 </button>
+            </div>
+
+            <div className="form-actions">
+                <p>En chargeant l'aperçu, vos modifications seront automatiquement enregistrées.</p>
             </div>
 
         </>
